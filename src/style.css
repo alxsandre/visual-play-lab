@@ -1,0 +1,15 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+}
+
+.control {
+  position: fixed;
+  right: 0;
+  width: 240px;
+  padding-left: 10px;
+}
