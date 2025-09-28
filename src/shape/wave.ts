@@ -8,6 +8,7 @@ export class Wave {
   w: number;
   h: number;
   v: number;
+  freq: number;
   points: number = 100;
   vertices: p5.Vector[] = [];
 
@@ -32,6 +33,7 @@ export class Wave {
     this.w = w;
     this.h = h;
     this.v = v;
+    this.freq = 0.01;
     this.points = 100;
     this.vertices = [];
   }
@@ -40,22 +42,22 @@ export class Wave {
     return colorHsluv(s, 30, 100, s.random(20, 80));
   }
 
+  getY(s: p5, x: number) {
+    const phase = s.millis() * this.v;
+    return this.pY + s.cos(x * this.freq + phase) * this.h;
+  }
+
   draw(s: p5) {
     s.push();
     s.noStroke();
     s.fill(this.color);
-    s.translate(this.pX, this.pY);
     s.beginShape();
-    this.vertices = [];
     for (let i = 0; i < this.points; i++) {
-      const x = i * this.w;
-      const freq = 0.15;
-      const phase = s.millis() * this.v;
+      const x = this.pX + i * this.w;
       const y = i === 0 || i === this.points - 1
-        ? - (this.pY - s.height)
-        : s.cos(i * freq + phase) * this.h;
+        ? s.height
+        : this.getY(s, x);
       s.vertex(x, y);
-      this.vertices.push(s.createVector(x + this.pX, y + this.pY));
     }
     s.endShape();
     s.pop();
