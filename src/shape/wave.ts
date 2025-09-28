@@ -55,7 +55,7 @@ export class Wave {
         ? - (this.pY - s.height)
         : s.cos(i * freq + phase) * this.h;
       s.vertex(x, y);
-      this.vertices.push(s.createVector(x, y));
+      this.vertices.push(s.createVector(x + this.pX, y + this.pY));
     }
     s.endShape();
     s.pop();

@@ -49,18 +49,18 @@ new p5((s: p5) => {
 
     const currentWave = waves[currentWaveIndex];
     const ellipseSize = 30;
-    const currentWaveX = currentWave.pX + currentWave.vertices[ellipsePosition].x;
-    const currentWaveY = currentWave.pY + currentWave.vertices[ellipsePosition].y - ellipseSize / 2;
+    const currentWaveX = currentWave.vertices[ellipsePosition].x;
+    const currentWaveY = currentWave.vertices[ellipsePosition].y - ellipseSize / 2;
 
 
     if (currentWaveIndex > 0) {
       const upWave = waves[currentWaveIndex - 1];
       const bottomWave = waves[currentWaveIndex + 1];
-      const upWaveY = upWave.pY + upWave.vertices[ellipsePosition].y - ellipseSize / 2;
-      const bottomWaveY = bottomWave.pY + bottomWave.vertices[ellipsePosition].y - ellipseSize / 2;
+      const upWaveY = upWave.vertices[ellipsePosition].y - ellipseSize / 2;
+      const bottomWaveY = bottomWave.vertices[ellipsePosition].y - ellipseSize / 2;
 
       if (currentWaveY > bottomWaveY) {
-        s.ellipse(bottomWave.pX + bottomWave.vertices[ellipsePosition].x, bottomWaveY, ellipseSize);
+        s.ellipse(bottomWave.vertices[ellipsePosition].x, bottomWaveY, ellipseSize);
         return;
       }
 
@@ -83,3 +83,14 @@ new p5((s: p5) => {
     if (s.keyCode === RIGHT_ARROW) moveRight = false;
   };
 });
+
+// EXEMPLE INTERPOLATION
+// const i = 5.3; // index "fractionnaire"
+// const i0 = Math.floor(i);
+// const i1 = Math.ceil(i);
+
+// const p0 = this.vertices[i0];
+// const p1 = this.vertices[i1];
+
+// const t = i - i0;
+// const interpolated = p5.Vector.lerp(p0, p1, t);
