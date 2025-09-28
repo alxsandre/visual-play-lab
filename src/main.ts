@@ -1,6 +1,6 @@
 import p5 from "p5";
 import { Wave } from "./shape/wave";
-// import { Ellipse } from "./shape/ellipse";
+import { Ellipse } from "./shape/ellipse";
 
 new p5((s: p5) => {
   let moveLeft = false;
@@ -13,7 +13,7 @@ new p5((s: p5) => {
   let ellipsePosition = 3;
 
   let waves: Wave[] = [];
-  // let ellipse: Ellipse;
+  let ellipse: Ellipse;
 
   s.setup = () => {
     s.createCanvas(s.windowWidth - 250, s.windowHeight);
@@ -28,7 +28,7 @@ new p5((s: p5) => {
         v: s.random(0.0005, 0.001),
       }));
     }
-    //  ellipse = new Ellipse({ s, x: 3, y: 0, size: 30 });
+    ellipse = new Ellipse({ s, x: 3, y: 200, size: 30 });
   };
 
   s.draw = () => {
@@ -44,8 +44,8 @@ new p5((s: p5) => {
     if (moveRight) {
       ellipsePosition++
     }
-    // ellipse.updatePosition(moveLeft, moveRight);
-
+    ellipse.updatePosition(moveLeft, moveRight);
+    ellipse.draw(s);
 
     const currentWave = waves[currentWaveIndex];
     const ellipseSize = 30;
@@ -71,7 +71,6 @@ new p5((s: p5) => {
       s.ellipse(currentWaveX, currentWaveY, ellipseSize);
     }
   };
-
 
   // Gestion des touches
   s.keyPressed = () => {
