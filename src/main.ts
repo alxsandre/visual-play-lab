@@ -1,23 +1,31 @@
 import p5 from "p5";
-import { SKETCHES, type SketchName } from "./sketches";
+import { waveSurferSketch } from "./sketches/waveSurfer/index";
+import { circlesSketch } from "./sketches/circles/index";
+
+const SKETCHES = [
+  { name: "circles",    fn: circlesSketch },
+  { name: "waveSurfer", fn: waveSurferSketch },
+];
+
+const defaultSketch = SKETCHES[0].name;
 
 let currentInstance: p5 | null = null;
 
-function mountSketch(name: SketchName) {
+const mountSketch = (name: string) => {
+  document.querySelectorAll<HTMLButtonElement>("[data-sketch]").forEach((b) =>
+    b.classList.toggle("active", b.dataset.sketch === name)
+  );
   if (currentInstance) currentInstance.remove();
-  currentInstance = new p5(SKETCHES.find((s) => s.name === name)!.fn);
-}
+  const sketch = SKETCHES.find((s) => s.name === name);
+  if (sketch) currentInstance = new p5(sketch.fn);
+};
 
 document.querySelectorAll<HTMLButtonElement>("[data-sketch]").forEach((btn) => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll<HTMLButtonElement>("[data-sketch]").forEach((b) =>
-      b.classList.remove("active")
-    );
-    btn.classList.add("active");
-    mountSketch(btn.dataset.sketch as SketchName);
+    const name = btn.dataset.sketch;
+    if (!name) return;
+    mountSketch(name);
   });
 });
 
-const defaultSketch: SketchName = "circles";
-document.querySelector<HTMLButtonElement>(`[data-sketch="${defaultSketch}"]`)?.classList.add("active");
 mountSketch(defaultSketch);
