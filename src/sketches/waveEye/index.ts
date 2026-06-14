@@ -1,41 +1,53 @@
 import type p5 from "p5";
 import { Triangle } from "./triangle";
 
+type Point = { x: number; y: number };
+
 export function waveEyeSketch(s: p5) {
-  let triangles: Triangle[] = [];
+  const triangles: Triangle[] = [];
 
   s.setup = () => {
     s.createCanvas(s.windowWidth - 250, s.windowHeight);
     s.noLoop();
 
-    const cols = 7;
-    const rows = 5;
+    const cols = 50;
+    const rows = 20;
     const tw = s.width / cols;
     const th = tw * 1.1;
     const amp = th * 0.3;
     const eyeR = tw * 0.13;
-
     const topPad = th + amp;
 
     for (let row = 0; row < rows; row++) {
       const baseY = topPad + (row / (rows - 1)) * (s.height - topPad);
       const phase = (row * Math.PI) / rows;
 
-      // where each triangle fill ends / next starts (wide range = organic connections)
-      const pts = Array.from({ length: cols + 1 }, () =>
-        baseY + s.random(-th * 0.2, th * 0.5)
-      );
-      // how far the side lines extend past the fill vertices
-      const lineEnds = pts.map(y => Math.min(y + s.random(tw * 0.2, tw * 0.6), s.height));
+      const apexes = Array.from({ length: cols }, (_, col): Point => ({
+        x: col * tw + tw / 2,
+        y: baseY - th + Math.sin((col / (cols - 1)) * Math.PI * 2 + phase) * amp,
+      }));
+
+      const rightExts = Array.from({ length: cols }, (_, col): Point => ({
+        x: (col + 1) * tw + s.map(s.noise(col * 0.45, row * 0.4), 0, 1, -tw * 0.35, tw * 0.35) + s.random(-tw * 0.08, tw * 0.08),
+        y: Math.min(baseY + s.map(s.noise(col * 0.45 + 100, row * 0.4), 0, 1, th * 0.1, th * 0.6) + s.random(-th * 0.06, th * 0.06), s.height),
+      }));
+
+      const connections: Point[] = [{ x: 0, y: baseY + s.map(s.noise(row * 0.4 + 200), 0, 1, -th * 0.1, th * 0.1) }];
+      for (let col = 0; col < cols; col++) {
+        const t = s.map(s.noise(col * 0.45 + 300, row * 0.4), 0, 1, 0.2, 0.9) + s.random(-0.08, 0.08);
+        connections.push({
+          x: apexes[col].x + t * (rightExts[col].x - apexes[col].x),
+          y: apexes[col].y + t * (rightExts[col].y - apexes[col].y),
+        });
+      }
 
       for (let col = 0; col < cols; col++) {
-        const ax = col * tw + tw / 2;
-        const ay = baseY - th + Math.sin((col / (cols - 1)) * Math.PI * 2 + phase) * amp;
         triangles.push(new Triangle(
           s,
-          ax, ay,
-          col * tw,       pts[col],       lineEnds[col],
-          (col + 1) * tw, pts[col + 1],   lineEnds[col + 1],
+          apexes[col].x,       apexes[col].y,
+          connections[col].x,  connections[col].y,
+          connections[col + 1].x, connections[col + 1].y,
+          rightExts[col].x,    rightExts[col].y,
           eyeR
         ));
       }
@@ -43,7 +55,11 @@ export function waveEyeSketch(s: p5) {
   };
 
   s.draw = () => {
-    s.background(10, 20, 80);
+    s.background(135, 195, 235);
     for (const tri of triangles) tri.draw(s);
+  };
+
+  s.keyPressed = () => {
+    if (s.key === "s") s.saveCanvas("waveEye", "png");
   };
 }
