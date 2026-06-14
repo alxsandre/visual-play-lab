@@ -1,8 +1,10 @@
 import p5 from "p5";
 import { waveSurferSketch } from "./sketches/waveSurfer/index";
 import { circlesSketch } from "./sketches/circles/index";
+import { waveEyeSketch } from "./sketches/waveEye/index";
 
 const SKETCHES = [
+  { name: "waveEye",    fn: waveEyeSketch },
   { name: "circles",    fn: circlesSketch },
   { name: "waveSurfer", fn: waveSurferSketch },
 ];
