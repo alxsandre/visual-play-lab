@@ -20,6 +20,10 @@ const mountSketch = (name: string) => {
   if (sketch) currentInstance = new p5(sketch.fn);
 };
 
+// init
+mountSketch(defaultSketch);
+
+// event
 document.querySelectorAll<HTMLButtonElement>("[data-sketch]").forEach((btn) => {
   btn.addEventListener("click", () => {
     const name = btn.dataset.sketch;
@@ -28,4 +32,3 @@ document.querySelectorAll<HTMLButtonElement>("[data-sketch]").forEach((btn) => {
   });
 });
 
-mountSketch(defaultSketch);
