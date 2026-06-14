@@ -1,5 +1,5 @@
 import type p5 from "p5";
-import { colorHsluv } from "../utils"
+import { colorHsluv } from "../../utils"
 
 export class Wave {
   color: p5.Color;

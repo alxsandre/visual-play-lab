@@ -13,3 +13,23 @@ canvas {
   width: 240px;
   padding-left: 10px;
 }
+
+.sketch-switcher {
+  display: flex;
+  gap: 6px;
+}
+
+.sketch-switcher button {
+  padding: 4px 10px;
+  border: 1px solid #999;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 13px;
+}
+
+.sketch-switcher button.active {
+  background: #222;
+  color: #fff;
+  border-color: #222;
+}

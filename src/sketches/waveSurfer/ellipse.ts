@@ -1,5 +1,5 @@
 import type p5 from "p5";
-import { colorHsluv } from "../utils";
+import { colorHsluv } from "../../utils";
 import type { Wave } from "./wave";
 
 export class Ellipse {
@@ -50,8 +50,8 @@ export class Ellipse {
         this.velocity.limit(18);
 
         if (!moveLeft && !moveRight) {
-            this.velocity.mult(0.9); // friction
-            if (this.velocity.mag() < 0.1) this.velocity.set(0, undefined); // stop net si trop faible
+            this.velocity.mult(0.9);
+            if (this.velocity.mag() < 0.1) this.velocity.set(0, undefined);
         }
 
         this.position.add(this.velocity);
