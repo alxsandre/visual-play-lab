@@ -10,12 +10,11 @@ export function waveEyeSketch(s: p5) {
     s.createCanvas(s.windowWidth - 250, s.windowHeight);
     s.noLoop();
 
-    const cols = 50;
+    const cols = 30;
     const rows = 20;
     const tw = s.width / cols;
-    const th = tw * 1.1;
+    const th = tw * 0.3;
     const amp = th * 0.3;
-    const eyeR = tw * 0.13;
     const topPad = th + amp;
 
     for (let row = 0; row < rows; row++) {
@@ -28,8 +27,8 @@ export function waveEyeSketch(s: p5) {
       }));
 
       const rightExts = Array.from({ length: cols }, (_, col): Point => ({
-        x: (col + 1) * tw + s.map(s.noise(col * 0.45, row * 0.4), 0, 1, -tw * 0.35, tw * 0.35) + s.random(-tw * 0.08, tw * 0.08),
-        y: Math.min(baseY + s.map(s.noise(col * 0.45 + 100, row * 0.4), 0, 1, th * 0.1, th * 0.6) + s.random(-th * 0.06, th * 0.06), s.height),
+        x: (col + 1) * tw + s.map(s.noise(col * 0.85, row * 0.4), 0, 1, -tw * 0.5, tw * 0.5) + s.random(-tw * 0.12, tw * 0.12),
+        y: Math.min(baseY + s.map(s.noise(col * 0.85 + 100, row * 0.4), 0, 1, th * 0.1, th * 0.8) + s.random(-th * 0.08, th * 0.08), s.height),
       }));
 
       const connections: Point[] = [{ x: 0, y: baseY + s.map(s.noise(row * 0.4 + 200), 0, 1, -th * 0.1, th * 0.1) }];
@@ -44,11 +43,9 @@ export function waveEyeSketch(s: p5) {
       for (let col = 0; col < cols; col++) {
         triangles.push(new Triangle(
           s,
-          apexes[col].x,       apexes[col].y,
-          connections[col].x,  connections[col].y,
-          connections[col + 1].x, connections[col + 1].y,
-          rightExts[col].x,    rightExts[col].y,
-          eyeR
+          apexes[col].x,      apexes[col].y,
+          connections[col].x, connections[col].y,
+          rightExts[col].x,   rightExts[col].y,
         ));
       }
     }

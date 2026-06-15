@@ -4,24 +4,18 @@ import { colorHsluv } from "../../utils";
 export class Triangle {
   ax: number; ay: number;
   lx: number; ly: number;
-  rfx: number; rfy: number;
   rx: number; ry: number;
-  eyeR: number;
   color: p5.Color;
 
   constructor(
     s: p5,
     ax: number, ay: number,
     lx: number, ly: number,
-    rfx: number, rfy: number,
     rx: number, ry: number,
-    eyeR: number
   ) {
     this.ax = ax; this.ay = ay;
     this.lx = lx; this.ly = ly;
-    this.rfx = rfx; this.rfy = rfy;
     this.rx = rx; this.ry = ry;
-    this.eyeR = eyeR;
     this.color = colorHsluv(s, s.random(0, 360), 100, s.random(40, 70));
   }
 
@@ -36,12 +30,13 @@ export class Triangle {
     ctx.closePath();
     ctx.clip();
 
-    const whiteH = this.eyeR * 5;
+    const eyeR = ((this.ly + this.ry) / 2 - this.ay) * 0.15;
+    const whiteH = eyeR * 5;
     s.noStroke();
     s.fill(240);
-    s.ellipse(this.ax, this.ay + whiteH / 2, this.eyeR * 8, whiteH);
+    s.ellipse(this.ax, this.ay + whiteH / 2, eyeR * 8, whiteH);
     s.fill(this.color);
-    s.circle(this.ax, this.ay + whiteH - this.eyeR, this.eyeR * 2);
+    s.circle(this.ax, this.ay + whiteH - eyeR, eyeR * 2);
 
     ctx.restore();
 
