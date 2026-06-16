@@ -15,8 +15,10 @@
     "vite": "^7.1.2"
   },
   "dependencies": {
+    "@tweakpane/core": "^2.0.5",
     "hsluv": "^1.0.1",
     "matter-js": "^0.20.0",
-    "p5": "^2.0.5"
+    "p5": "^2.0.5",
+    "tweakpane": "^4.0.5"
   }
 }
