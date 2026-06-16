@@ -1,11 +1,9 @@
 import type p5 from "p5";
-import { Pane } from "tweakpane";
+import type { FolderApi } from "tweakpane";
 import { Triangle } from "./triangle";
+import { setupSaveKey } from "../../sketch-utils";
 
 type Point = { x: number; y: number };
-
-// destroyed and recreated each time the sketch mounts
-let pane: Pane | null = null;
 
 const params = {
   // grid
@@ -21,9 +19,7 @@ const params = {
   jitterY:   0.8,      // max vertical drop (as fraction of th)
 };
 
-export function waveEyeSketch(s: p5) {
-  pane?.dispose();
-
+export function waveEyeSketch(s: p5, folder: FolderApi) {
   const triangles: Triangle[] = [];
 
   const generate = () => {
@@ -72,34 +68,29 @@ export function waveEyeSketch(s: p5) {
   };
 
   s.setup = () => {
-    s.createCanvas(s.windowWidth - 250, s.windowHeight);
+    s.createCanvas(s.windowWidth, s.windowHeight);
     s.noLoop();
 
-    pane = new Pane({ title: "waveEye" });
-
-    const grid = pane.addFolder({ title: "Grid" });
+    const grid = folder.addFolder({ title: "Grid" });
     grid.addBinding(params, "cols",  { min: 5,   max: 500,  step: 1,   label: "colonnes" }).on("change", generate);
     grid.addBinding(params, "rows",  { min: 5,   max: 200,  step: 1,   label: "rangées"  }).on("change", generate);
 
-    const shape = pane.addFolder({ title: "Forme" });
+    const shape = folder.addFolder({ title: "Forme" });
     shape.addBinding(params, "thRatio",      { min: 0.1, max: 1.5, label: "hauteur"  }).on("change", generate);
     shape.addBinding(params, "waveAmpRatio", { min: 0,   max: 1,   label: "amplitude"}).on("change", generate);
     shape.addBinding(params, "waveFreq",     { min: 0.5, max: 8,   label: "fréquence"}).on("change", generate);
 
-    const jitter = pane.addFolder({ title: "Chaos" });
+    const jitter = folder.addFolder({ title: "Chaos" });
     jitter.addBinding(params, "noiseStep", { min: 0.1, max: 2,   label: "pas noise"  }).on("change", generate);
     jitter.addBinding(params, "jitterX",   { min: 0,   max: 1.5, label: "étalement X"}).on("change", generate);
     jitter.addBinding(params, "jitterY",   { min: 0.1, max: 2,   label: "chute Y"    }).on("change", generate);
 
+    setupSaveKey(s, "waveEye");
     generate();
   };
 
   s.draw = () => {
     s.background(135, 195, 235);
     for (const tri of triangles) tri.draw(s);
-  };
-
-  s.keyPressed = () => {
-    if (s.key === "s") s.saveCanvas("waveEye", "png");
   };
 }

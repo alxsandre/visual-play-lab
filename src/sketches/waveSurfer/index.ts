@@ -1,4 +1,5 @@
 import type p5 from "p5";
+import type { FolderApi } from "tweakpane";
 import { Wave } from "./wave";
 import { Ellipse } from "./ellipse";
 
@@ -7,7 +8,7 @@ const ARROW = {
   RIGHT: 39,
 };
 
-export function waveSurferSketch(s: p5) {
+export function waveSurferSketch(s: p5, _folder: FolderApi) {
   let moveLeft = false;
   let moveRight = false;
   let waves: Wave[] = [];
@@ -16,7 +17,7 @@ export function waveSurferSketch(s: p5) {
   const nbWaves = 20;
 
   s.setup = () => {
-    s.createCanvas(s.windowWidth - 250, s.windowHeight);
+    s.createCanvas(s.windowWidth, s.windowHeight);
 
     for (let i = 0; i < nbWaves; i++) {
       waves.push(new Wave({
