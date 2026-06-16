@@ -3,11 +3,13 @@ import type { FolderApi } from "tweakpane";
 import { waveSurferSketch } from "./sketches/waveSurfer/index";
 import { circlesSketch } from "./sketches/circles/index";
 import { waveEyeSketch } from "./sketches/waveEye/index";
+import { sandGrainsSketch } from "./sketches/sandGrains/index";
 import { createPane } from "./sketch-utils";
 
 type SketchFn = (s: p5, folder: FolderApi) => void;
 
 const SKETCHES: { name: string; fn: SketchFn }[] = [
+  { name: "sandGrains", fn: sandGrainsSketch },
   { name: "waveEye",    fn: waveEyeSketch },
   { name: "circles",    fn: circlesSketch },
   { name: "waveSurfer", fn: waveSurferSketch },
